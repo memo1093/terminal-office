@@ -56,3 +56,35 @@ jobs:
             dist/*.AppImage
             dist/*.deb
           if-no-files-found: error
+
+  # On a v* tag, publish every platform's packages as a GitHub Release.
+  release:
+    needs: dist
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          path: packages
+          merge-multiple: true
+      - run: ls -la packages
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: Terminal Office ${{ github.ref_name }}
+          files: packages/*
+          generate_release_notes: true
+          body: |
+            Pixel-art office that visualizes your running terminals — works fully offline.
+            Çalışan terminallerini pixel-art bir ofis olarak gösterir — tamamen internetsiz çalışır.
+
+            ### Download / İndir
+            | | |
+            | --- | --- |
+            | **Windows** | `Terminal Office Setup *.exe` (installer / kurulum) · `Terminal Office *.exe` (portable / kurulumsuz) |
+            | **macOS** | `*-arm64.dmg` (Apple Silicon) · `*.dmg` (Intel) |
+            | **Linux** | `*.AppImage` · `*.deb` |
+
+            Builds are unsigned: on macOS right-click → **Open** the first time; on Windows SmartScreen choose **More info → Run anyway**.
+            Paketler imzasız: macOS'ta ilk açılışta sağ tık → **Aç**; Windows'ta SmartScreen'de **Ek bilgi → Yine de çalıştır**.
