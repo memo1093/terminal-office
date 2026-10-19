@@ -19,18 +19,33 @@ jobs:
             script: dist:linux
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
       # Installs the node-pty prebuilt binary for this runner's OS.
       - run: npm ci
       - run: npm run typecheck
-      - run: npm run ${{ matrix.script }}
+      - name: Package
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run ${{ matrix.script }} 2>&1 | tee build.log
         env:
           # Unsigned builds; set signing secrets here when available.
           CSC_IDENTITY_AUTO_DISCOVERY: false
+      # Job logs are only visible to signed-in users; annotations are public.
+      - name: Report packaging error
+        if: failure()
+        shell: bash
+        run: |
+          node -e "
+            const fs = require('fs')
+            const log = fs.existsSync('build.log') ? fs.readFileSync('build.log', 'utf8') : 'no build.log'
+            const tail = log.replace(/\x1b\[[0-9;]*m/g, '').split(/\r?\n/).filter(Boolean).slice(-40).join('\n')
+            console.log('::error title=Packaging failed (${{ matrix.os }})::' + tail.replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A'))
+          "
       - uses: actions/upload-artifact@v4
         with:
           name: terminal-office-${{ matrix.os }}
