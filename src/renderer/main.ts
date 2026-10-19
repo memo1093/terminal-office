@@ -1,5 +1,6 @@
 import './styles.css'
 import type { Api, CpuSample, DeskConfig, ThemePref } from '../shared/types'
+import { iconPixels, scalePixels } from '../shared/icon-art'
 import { currentLang, onLangChange, setLang, t } from './i18n'
 import { Office } from './scene/office'
 import { BODY_COLORS, DESK_COLORS } from './scene/palette'
@@ -9,6 +10,17 @@ import { ConsolePanel } from './ui/console-panel'
 import { SettingsDialog } from './ui/settings-dialog'
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T
+
+/** Title bar logo: the app icon's 16px art, drawn at a whole number of device pixels per art pixel. */
+function drawLogos(): void {
+  const k = Math.max(1, Math.round(window.devicePixelRatio || 1))
+  const p = scalePixels(iconPixels('small'), k)
+  for (const c of document.querySelectorAll<HTMLCanvasElement>('canvas.logo')) {
+    c.width = c.height = p.size
+    c.style.width = c.style.height = `${p.size / (window.devicePixelRatio || 1)}px`
+    c.getContext('2d')!.putImageData(new ImageData(new Uint8ClampedArray(p.data), p.size, p.size), 0, 0)
+  }
+}
 
 const folderName = (cwd: string) => cwd.split(/[\\/]+/).filter(Boolean).pop() ?? cwd
 /** Desks sharing a folder name count as the same project. */
@@ -31,6 +43,7 @@ async function init(): Promise<void> {
   const api: Api = window.api ?? (await import('./mock-api')).createMockApi()
 
   document.body.classList.add(`platform-${api.platform}`)
+  drawLogos()
   const office = new Office($<HTMLCanvasElement>('office'))
   if (import.meta.env.DEV) Object.assign(window, { office })
   const cmd = new CommandInput(api)

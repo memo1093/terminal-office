@@ -79,13 +79,9 @@ button.danger-hover:hover {
 
 .logo {
   display: inline-block;
-  width: 14px;
-  height: 10px;
-  background: var(--accent);
-  box-shadow:
-    0 0 0 2px var(--line),
-    inset 3px 3px 0 -2px #231d1a,
-    inset -3px 3px 0 -2px #231d1a;
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
   margin-right: 8px;
 }
 

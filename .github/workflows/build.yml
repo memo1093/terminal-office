@@ -82,8 +82,8 @@ jobs:
             ### Download / İndir
             | | |
             | --- | --- |
-            | **Windows** | `Terminal Office Setup *.exe` (installer / kurulum) · `Terminal Office *.exe` (portable / kurulumsuz) |
-            | **macOS** | `*-arm64.dmg` (Apple Silicon) · `*.dmg` (Intel) |
+            | **Windows** | `Terminal.Office.Setup.*.exe` (installer / kurulum) · `Terminal.Office.*.exe` (portable / kurulumsuz) |
+            | **macOS** | `Terminal.Office-*-arm64.dmg` (Apple Silicon) · `Terminal.Office-*.dmg` (Intel) |
             | **Linux** | `*.AppImage` · `*.deb` |
 
             Builds are unsigned: on macOS right-click → **Open** the first time; on Windows SmartScreen choose **More info → Run anyway**.

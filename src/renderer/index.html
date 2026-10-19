@@ -11,7 +11,7 @@
   <body>
     <!-- Visible text is filled in from src/shared/i18n.ts via data-i18n* attributes. -->
     <header id="titlebar">
-      <div class="brand"><span class="logo"></span>Terminal Office</div>
+      <div class="brand"><canvas class="logo" width="16" height="16"></canvas>Terminal Office</div>
       <div class="actions">
         <span id="cpu" class="cpu" aria-live="off">CPU –</span>
         <button id="btn-add" class="primary" data-i18n="bar.add" data-i18n-title="bar.add.title"></button>
@@ -23,7 +23,7 @@
     </header>
 
     <div id="mini-bar">
-      <span class="brand"><span class="logo"></span><span id="mini-cpu" class="cpu">CPU –</span></span>
+      <span class="brand"><canvas class="logo" width="16" height="16"></canvas><span id="mini-cpu" class="cpu">CPU –</span></span>
       <div class="actions">
         <button id="mini-add" data-i18n-title="mini.add">+</button>
         <button id="mini-restore" data-i18n-title="mini.restore">⤢</button>

@@ -10,6 +10,7 @@ files:
 asarUnpack:
   - node_modules/@lydell/**
 win:
+  icon: build/icon.ico
   target:
     - nsis
     - portable
@@ -17,6 +18,7 @@ nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
 mac:
+  icon: build/icon.png
   category: public.app-category.developer-tools
   target:
     - target: dmg
@@ -24,6 +26,7 @@ mac:
     - target: zip
       arch: [arm64, x64]
 linux:
+  icon: build/icon.png
   category: Development
   maintainer: Mehmet Akyer
   synopsis: Pixel-art office that visualizes your running terminals

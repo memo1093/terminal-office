@@ -113,7 +113,7 @@ function createWindow(): void {
     ...(isMac ? { titleBarStyle: 'hiddenInset' as const, trafficLightPosition: { x: 14, y: 13 } } : { frame: false }),
     show: false,
     title: 'Terminal Office',
-    icon: makeIcon(32),
+    icon: makeIcon('full'),
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#2b2a2e' : '#e9e4da',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -152,7 +152,7 @@ if (!app.requestSingleInstanceLock()) {
     Menu.setApplicationMenu(
       isMac ? Menu.buildFromTemplate([{ role: 'appMenu' }, { role: 'editMenu' }, { role: 'windowMenu' }]) : null
     )
-    if (isMac) app.dock?.setIcon(makeIcon(128))
+    if (isMac) app.dock?.setIcon(makeIcon('full', 16))
     nativeTheme.themeSource = loadStore().theme
 
     registerIpc(ptys, () => win, {
@@ -166,7 +166,7 @@ if (!app.requestSingleInstanceLock()) {
     startCpuSampler((s) => send('sys:cpu', s), () => !!win && win.isVisible() && !win.isMinimized())
 
     try {
-      tray = new Tray(makeIcon(16))
+      tray = new Tray(makeIcon('small'))
       tray.setToolTip('Terminal Office')
       // On macOS a click opens the menu; elsewhere it toggles the window.
       if (!isMac) tray.on('click', () => (win?.isVisible() ? win.hide() : showWindow()))

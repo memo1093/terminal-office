@@ -52,6 +52,8 @@ Renderer, Electron dışında düz tarayıcıda açılırsa (`src/renderer/mock-
 - `src/renderer/scene` — canvas üzerinde izometrik pixel-art sahne; sprite'lar kod içinde piksel haritası, kontur otomatik üretilir
 - `src/renderer/ui` — komut girişi ve konsol paneli
 
+Uygulama ikonu `src/shared/icon-art.ts` içinde piksel piksel tanımlı; pencere/tepsi ikonu ve başlık logosu buradan çizilir. Değiştirdikten sonra `npm run icons` paketleme ikonlarını (`build/icon.png`, `build/icon.ico`) yeniden üretir.
+
 Arayüz metinleri `src/shared/i18n.ts` içinde; yeni dil eklemek için oraya bir sözlük eklemek yeterli.
 
 Harici asset, font veya CDN yok; her şey offline çalışır.
