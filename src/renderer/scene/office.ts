@@ -413,6 +413,33 @@ export class Office {
     }
   }
 
+  // ---- screen geometry (for the walkthrough spotlight) ----------------------
+
+  /**
+   * Where a scene object currently is on screen, in CSS pixels (viewport coords).
+   * `desk`/`char` use the given desk id, or the first desk when omitted.
+   */
+  screenRect(kind: 'desk' | 'char' | 'machine', id?: string): DOMRect | null {
+    const L = this.L
+    const toCss = (s: Sprite, at: Pt): DOMRect => {
+      const r = this.canvas.getBoundingClientRect()
+      const dpr = window.devicePixelRatio || 1
+      const k = L.scale / dpr
+      const x = (L.ox + Math.round(at.x) - s.ax) * k
+      const y = (L.oy + Math.round(at.y) - s.ay) * k
+      return new DOMRect(r.left + x, r.top + y, s.img.width * k, s.img.height * k)
+    }
+    if (kind === 'machine') {
+      const o = this.machineOrigin()
+      return toCss(coffeeMachineSprite(this.pal), iso(o.x, o.y))
+    }
+    const d = id ? this.desks.get(id) : this.desks.values().next().value
+    if (!d) return null
+    if (kind === 'char') return d.char.visible ? toCss(characterSprite(d.colorIdx, 'stand', this.pal), this.charPos(d)) : null
+    const { ox, oy } = this.slotOrigin(d.slot)
+    return toCss(deskSprite(this.pal, false, d.deskColor), iso(ox, oy + 1))
+  }
+
   // ---- input ----------------------------------------------------------------
 
   private toWorld(e: MouseEvent): Pt {

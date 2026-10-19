@@ -19,7 +19,7 @@ const isDir = (p: string) => {
 
 export function loadStore(): StoreData {
   if (cache) return cache
-  let data: StoreData = { desks: [], theme: 'system', recent: [], lang: DEFAULT_LANG }
+  let data: StoreData = { desks: [], theme: 'system', recent: [], lang: DEFAULT_LANG, onboarded: false }
   try {
     if (existsSync(file())) {
       const raw = JSON.parse(readFileSync(file(), 'utf8'))
@@ -32,7 +32,9 @@ export function loadStore(): StoreData {
         theme: ['system', 'light', 'dark'].includes(raw.theme) ? raw.theme : 'system',
         // Folders that were deleted/moved since are dropped.
         recent: recent.filter(isDir).slice(0, MAX_RECENT),
-        lang: isLang(raw.lang) ? raw.lang : DEFAULT_LANG
+        lang: isLang(raw.lang) ? raw.lang : DEFAULT_LANG,
+        // Configs from before the walkthrough existed: people with desks already know the app.
+        onboarded: typeof raw.onboarded === 'boolean' ? raw.onboarded : desks.length > 0
       }
     }
   } catch (err) {
@@ -63,6 +65,11 @@ export function saveTheme(theme: ThemePref): void {
 
 export function saveLang(lang: Lang): void {
   loadStore().lang = lang
+  persist()
+}
+
+export function saveOnboarded(done: boolean): void {
+  loadStore().onboarded = done
   persist()
 }
 

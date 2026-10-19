@@ -2,7 +2,7 @@ import { join } from 'node:path'
 import { app, BrowserWindow, Menu, nativeTheme, screen, Tray, type Rectangle } from 'electron'
 import { translate, type Key } from '../shared/i18n'
 import type { WindowMode } from '../shared/types'
-import { startCpuSampler } from './cpu'
+import { startSysSampler } from './sys-stats'
 import { makeIcon } from './icon'
 import { registerIpc } from './ipc'
 import { PtyManager } from './pty-manager'
@@ -163,7 +163,7 @@ if (!app.requestSingleInstanceLock()) {
     })
     createWindow()
     // Only sample while someone can see the number.
-    startCpuSampler((s) => send('sys:cpu', s), () => !!win && win.isVisible() && !win.isMinimized())
+    startSysSampler((s) => send('sys:stats', s), () => !!win && win.isVisible() && !win.isMinimized())
 
     try {
       tray = new Tray(makeIcon('small'))

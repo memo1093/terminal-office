@@ -21,13 +21,20 @@ export interface StoreData {
   /** Recently used project folders, newest first. */
   recent: string[]
   lang: Lang
+  /** The first-run walkthrough has been shown (or skipped). */
+  onboarded: boolean
 }
 
-/** CPU usage in percent of the whole machine (all cores). */
-export interface CpuSample {
-  total: number
-  /** Terminal Office's own processes (main + renderer + GPU), excluding the shells. */
-  app: number
+/** Machine-wide usage sample. "app" = Terminal Office's own processes (main + renderer + GPU), excluding the shells. */
+export interface SysSample {
+  /** CPU % of all cores. */
+  cpu: number
+  appCpu: number
+  /** Physical memory in use, %. */
+  mem: number
+  memUsedGB: number
+  memTotalGB: number
+  appMemMB: number
 }
 
 export interface PtyData {
@@ -70,6 +77,7 @@ export interface Api {
     setTheme(theme: ThemePref): Promise<void>
     saveRecent(recent: string[]): Promise<void>
     setLang(lang: Lang): Promise<void>
+    setOnboarded(done: boolean): Promise<void>
   }
   pickFolder(): Promise<string | null>
   /** Opens an http(s) URL in the default browser. */
@@ -86,7 +94,7 @@ export interface Api {
     onExit(cb: (e: { id: string; code: number }) => void): void
   }
   sys: {
-    onCpu(cb: (s: CpuSample) => void): void
+    onStats(cb: (s: SysSample) => void): void
   }
   win: {
     setMode(mode: WindowMode): void

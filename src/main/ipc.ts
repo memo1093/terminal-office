@@ -2,7 +2,7 @@ import { BrowserWindow, dialog, ipcMain, nativeTheme, shell } from 'electron'
 import { isLang, translate, type Lang } from '../shared/i18n'
 import type { DeskConfig, ThemePref, WindowMode } from '../shared/types'
 import type { PtyManager } from './pty-manager'
-import { loadStore, saveDesks, saveLang, saveRecent, saveTheme } from './store'
+import { loadStore, saveDesks, saveLang, saveOnboarded, saveRecent, saveTheme } from './store'
 
 export interface WindowControls {
   setMode(mode: WindowMode): void
@@ -20,6 +20,7 @@ export function registerIpc(ptys: PtyManager, getWin: () => BrowserWindow | null
     saveLang(lang)
     controls.langChanged()
   })
+  ipcMain.handle('store:setOnboarded', (_e, done: boolean) => saveOnboarded(!!done))
   ipcMain.handle('store:saveRecent', (_e, recent: string[]) => saveRecent(recent))
   ipcMain.handle('store:setTheme', (_e, theme: ThemePref) => {
     nativeTheme.themeSource = theme

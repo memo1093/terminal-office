@@ -32,6 +32,8 @@ export function createMockApi(): Api {
   const store: StoreData = {
     theme: 'system',
     lang: 'en',
+    // Preview the walkthrough by default in the browser mock.
+    onboarded: false,
     recent: ['D:\\Projects\\portfolyo', 'D:\\Projects\\terminal-office', 'D:\\Projects\\GameStore', 'D:\\Projects\\netflix-app', 'D:\\Projects\\nuxt-tuto'],
     desks: [
       { id: 'a', cwd: 'D:\\Projects\\portfolyo', shell: 'powershell.exe', slot: 0, color: 0 },
@@ -78,7 +80,8 @@ export function createMockApi(): Api {
       saveDesks: async (desks: DeskConfig[]) => void (store.desks = desks),
       setTheme: async (t) => void (store.theme = t),
       saveRecent: async (r) => void (store.recent = r),
-      setLang: async (l) => void (store.lang = l)
+      setLang: async (l) => void (store.lang = l),
+      setOnboarded: async (d) => void (store.onboarded = d)
     },
     pickFolder: async () => `D:\\Projects\\demo-${Math.floor(Math.random() * 100)}`,
     pty: {
@@ -96,7 +99,12 @@ export function createMockApi(): Api {
       onExit: () => {}
     },
     sys: {
-      onCpu: (cb) => void setInterval(() => cb({ total: Math.round(10 + Math.random() * 85), app: 1.2 }), 2000)
+      onStats: (cb) =>
+        void setInterval(
+          () =>
+            cb({ cpu: Math.round(10 + Math.random() * 85), appCpu: 1.2, mem: 58 + Math.round(Math.random() * 30), memUsedGB: 9.4, memTotalGB: 16, appMemMB: 182 }),
+          2000
+        )
     },
     win: {
       setMode: (m) => modeCbs.forEach((cb) => cb(m)),

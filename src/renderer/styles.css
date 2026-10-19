@@ -277,9 +277,73 @@ body.mini {
 }
 #mini-bar .cpu {
   min-width: 0;
-  margin-left: 8px;
+  margin-left: 6px;
+  margin-right: 0;
   padding: 0 5px;
   font-size: 11px;
+}
+
+/* ---- walkthrough ------------------------------------------------------- */
+#tour {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+}
+/* The spotlight: a transparent box whose huge shadow dims everything around it. */
+.tour-spot {
+  position: fixed;
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 9999px rgba(16, 15, 20, 0.62);
+  pointer-events: none;
+  transition:
+    left 0.25s,
+    top 0.25s,
+    width 0.25s,
+    height 0.25s;
+}
+.tour-card {
+  position: fixed;
+  width: min(360px, calc(100vw - 16px));
+  padding: 12px 14px 10px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+  box-shadow: 4px 4px 0 var(--shadow);
+}
+.tour-title {
+  font-weight: bold;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+.tour-body {
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+.tour-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tour-step {
+  flex: 1;
+  color: var(--muted);
+  font-size: 12px;
+}
+.tour-skip {
+  box-shadow: none;
+  border-color: transparent;
+  background: none;
+  color: var(--muted);
+  padding: 2px 6px;
+}
+.tour-skip:hover {
+  background: none;
+  color: var(--text);
+  text-decoration: underline;
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+  transform: none;
 }
 
 /* ---- settings dialog ---------------------------------------------------- */

@@ -14,7 +14,8 @@ const api: Api = {
     saveDesks: (desks) => ipcRenderer.invoke('store:saveDesks', desks),
     setTheme: (theme) => ipcRenderer.invoke('store:setTheme', theme),
     saveRecent: (recent) => ipcRenderer.invoke('store:saveRecent', recent),
-    setLang: (lang) => ipcRenderer.invoke('store:setLang', lang)
+    setLang: (lang) => ipcRenderer.invoke('store:setLang', lang),
+    setOnboarded: (done) => ipcRenderer.invoke('store:setOnboarded', done)
   },
   pickFolder: () => ipcRenderer.invoke('dialog:pickFolder'),
   openUrl: (url) => ipcRenderer.send('open:url', url),
@@ -30,7 +31,7 @@ const api: Api = {
     onExit: on('pty:exit')
   },
   sys: {
-    onCpu: on('sys:cpu')
+    onStats: on('sys:stats')
   },
   win: {
     setMode: (mode) => ipcRenderer.send('win:setMode', mode),

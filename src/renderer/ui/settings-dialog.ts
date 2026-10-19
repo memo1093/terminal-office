@@ -14,12 +14,18 @@ export class SettingsDialog {
 
   onLang: (lang: Lang) => void = () => {}
   onTheme: (theme: ThemePref) => void = () => {}
+  /** “Show the tour again”. */
+  onTour: () => void = () => {}
 
   constructor() {
     this.overlay.addEventListener('mousedown', (e) => {
       if (e.target === this.overlay) this.close()
     })
     $('settings-close').addEventListener('click', () => this.close())
+    $('set-tour').addEventListener('click', () => {
+      this.close()
+      this.onTour()
+    })
     this.overlay.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') this.close()
     })

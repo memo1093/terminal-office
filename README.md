@@ -1,10 +1,35 @@
-# Terminal Office
+<p align="center">
+  <img src="build/icon.png" width="96" height="96" alt="Terminal Office icon" />
+</p>
 
-Terminallerini pixel-art bir ofis olarak gösteren, internetsiz çalışan bir Electron masaüstü uygulaması.
+<h1 align="center">Terminal Office</h1>
+
+<p align="center">
+  Terminallerini pixel-art bir ofis olarak gösteren, internetsiz çalışan masaüstü uygulaması.<br />
+  <a href="https://github.com/memo1093/terminal-office/releases/latest"><b>Son sürümü indir →</b></a>
+</p>
+
+![Terminal Office ekran görüntüsü](docs/screenshot.png)
+
 Windows, macOS ve Linux'ta çalışır. Her terminal bir masadır; masada küçük bir karakter çalışır, başının üstünde klasör adı ve son çıktılar (konuşma baloncuğu) görünür.
 Terminal bir süre (25–50 sn) sessiz kalırsa çalışan masasından kalkar: ya köşedeki kahve makinesinden kahve alır ya da ofiste dolaşır. Bu sırada terminale çıktı gelirse başında **!** ile hemen masasına döner.
 
+## İndir
+
+Sürüm **v0.1.2** — tüm sürümler: [Releases](https://github.com/memo1093/terminal-office/releases)
+
+| Sistem | Dosya |
+| --- | --- |
+| **Windows** | [Kurulum (.exe)](https://github.com/memo1093/terminal-office/releases/download/v0.1.2/Terminal.Office.Setup.0.1.2.exe) · [Kurulumsuz (portable .exe)](https://github.com/memo1093/terminal-office/releases/download/v0.1.2/Terminal.Office.0.1.2.exe) |
+| **macOS** (Apple Silicon) | [Terminal.Office-0.1.2-arm64.dmg](https://github.com/memo1093/terminal-office/releases/download/v0.1.2/Terminal.Office-0.1.2-arm64.dmg) |
+| **macOS** (Intel) | [Terminal.Office-0.1.2.dmg](https://github.com/memo1093/terminal-office/releases/download/v0.1.2/Terminal.Office-0.1.2.dmg) |
+| **Linux** | [AppImage](https://github.com/memo1093/terminal-office/releases/download/v0.1.2/Terminal.Office-0.1.2.AppImage) · [.deb](https://github.com/memo1093/terminal-office/releases/download/v0.1.2/terminal-office_0.1.2_amd64.deb) |
+
+Paketler imzasız: macOS'ta ilk açılışta sağ tık → **Aç**; Windows'ta SmartScreen çıkarsa **Ek bilgi → Yine de çalıştır**.
+
 ## Kullanım
+
+İlk açılışta kısa bir tanıtım turu arayüzü adım adım gösterir (Esc ile atlanır, ⚙ Ayarlar'dan tekrar izlenebilir).
 
 | Eylem | Sonuç |
 | --- | --- |
@@ -16,14 +41,14 @@ Terminal bir süre (25–50 sn) sessiz kalırsa çalışan masasından kalkar: y
 | ▣ | Mini mod: sağ üste küçülür, tüm uygulamaların önünde kalır |
 | — | Görev çubuğuna küçült (macOS'ta sarı trafik ışığı) |
 | ✕ | Arka plana al: tepside / menü çubuğunda çalışmaya devam eder (çıkış tepsi menüsünden, macOS'ta ⌘Q) |
-| ⚙ | Ayarlar: dil (English / Türkçe — varsayılan English) ve tema |
-| CPU | Sağ üstte sistem CPU kullanımı (2 sn'de bir; %50+ sarı, %80+ kırmızı). Üzerine gelince uygulamanın kendi payı görünür |
+| ⚙ | Ayarlar: dil (English / Türkçe — varsayılan English), tema ve tanıtım turunu tekrar gösterme |
+| CPU / RAM | Sağ üstte sistem CPU ve bellek kullanımı (2 sn'de bir; CPU %50+ / RAM %75+ sarı, CPU %80+ / RAM %90+ kırmızı). Üzerine gelince uygulamanın kendi payı (CPU %, MB) görünür |
 
 Her projenin masa rengi ayrıdır; aynı klasör adıyla açılan terminaller aynı renkte masaya oturur ve `api #1`, `api #2` diye numaralanır.
 Baloncuklardaki çıktı terminal renklerini korur; renksiz metinde hata kırmızı, uyarı sarı, başarı yeşil, URL mavi gösterilir.
 
 Masalar `office.json` içinde saklanır ve açılışta geri yüklenir:
-Windows `%APPDATA%	erminal-office`, macOS `~/Library/Application Support/terminal-office`, Linux `~/.config/terminal-office`.
+Windows `%APPDATA%\terminal-office`, macOS `~/Library/Application Support/terminal-office`, Linux `~/.config/terminal-office`.
 
 ### Platform notları
 - **macOS:** Pencere kapatılınca Dock'ta ve menü çubuğunda kalır; Dock ikonuna tıklamak geri getirir. Build imzasız olduğundan ilk açılışta sağ tık → *Aç* gerekir.
@@ -52,7 +77,7 @@ Renderer, Electron dışında düz tarayıcıda açılırsa (`src/renderer/mock-
 - `src/renderer/scene` — canvas üzerinde izometrik pixel-art sahne; sprite'lar kod içinde piksel haritası, kontur otomatik üretilir
 - `src/renderer/ui` — komut girişi ve konsol paneli
 
-Uygulama ikonu `src/shared/icon-art.ts` içinde piksel piksel tanımlı; pencere/tepsi ikonu ve başlık logosu buradan çizilir. Değiştirdikten sonra `npm run icons` paketleme ikonlarını (`build/icon.png`, `build/icon.ico`) yeniden üretir.
+Uygulama ikonu `src/shared/icon-art.ts` içinde piksel piksel tanımlı; pencere/tepsi ikonu ve başlık logosu buradan çizilir. Değiştirdikten sonra `npm run icons` paketleme görsellerini yeniden üretir: uygulama ikonu (`build/icon.png`, `build/icon.ico`), DMG penceresi arka planı (`build/background.png`, `@2x`) ve Windows kurulum sihirbazı görselleri (`build/*.bmp`).
 
 Arayüz metinleri `src/shared/i18n.ts` içinde; yeni dil eklemek için oraya bir sözlük eklemek yeterli.
 

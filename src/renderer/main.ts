@@ -1,5 +1,5 @@
 import './styles.css'
-import type { Api, CpuSample, DeskConfig, ThemePref } from '../shared/types'
+import type { Api, DeskConfig, SysSample, ThemePref } from '../shared/types'
 import { iconPixels, scalePixels } from '../shared/icon-art'
 import { currentLang, onLangChange, setLang, t } from './i18n'
 import { Office } from './scene/office'
@@ -8,6 +8,7 @@ import { AddDialog } from './ui/add-dialog'
 import { CommandInput } from './ui/command-input'
 import { ConsolePanel } from './ui/console-panel'
 import { SettingsDialog } from './ui/settings-dialog'
+import { Tour, unionRect } from './ui/tour'
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T
 
@@ -177,23 +178,48 @@ async function init(): Promise<void> {
     if (addDialog.isOpen) addDialog.render(recent)
   })
 
-  // CPU readout (top right; in the mini bar when minimised to mini mode).
-  const cpuEls = [$('cpu'), $('mini-cpu')]
-  let lastCpu: CpuSample | null = null
-  const showCpu = () => {
-    if (!lastCpu) return
-    for (const el of cpuEls) {
-      el.textContent = `CPU ${lastCpu.total}%`
-      el.title = t('cpu.title', { app: lastCpu.app })
-      el.classList.toggle('warn', lastCpu.total >= 50 && lastCpu.total < 80)
-      el.classList.toggle('high', lastCpu.total >= 80)
+  // CPU / RAM readouts (top right; in the mini bar in mini mode).
+  let stats: SysSample | null = null
+  const meter = (els: HTMLElement[], label: string, value: number, title: string, warn: number, high: number) => {
+    for (const el of els) {
+      el.textContent = `${label} ${value}%`
+      el.title = title
+      el.classList.toggle('warn', value >= warn && value < high)
+      el.classList.toggle('high', value >= high)
     }
   }
-  api.sys.onCpu((s) => {
-    lastCpu = s
-    showCpu()
+  const showStats = () => {
+    if (!stats) return
+    meter([$('cpu'), $('mini-cpu')], 'CPU', stats.cpu, t('cpu.title', { app: stats.appCpu }), 50, 80)
+    meter([$('ram'), $('mini-ram')], 'RAM', stats.mem, t('ram.title', { used: stats.memUsedGB, total: stats.memTotalGB, app: stats.appMemMB }), 75, 90)
+  }
+  api.sys.onStats((s) => {
+    stats = s
+    showStats()
   })
-  onLangChange(showCpu)
+  onLangChange(showStats)
+
+  // ---- first-run walkthrough ----
+  const stage = () => $('stage').getBoundingClientRect()
+  /** Bubble area: the worker plus the space above its head. */
+  const aboveWorker = () => {
+    const r = office.screenRect('char')
+    return r ? new DOMRect(r.left - 60, r.top - 90, r.width + 120, r.height + 90) : stage()
+  }
+  const tour = new Tour([
+    { id: 'welcome', target: () => null },
+    { id: 'add', target: () => $('btn-add').getBoundingClientRect() },
+    { id: 'desk', target: () => office.screenRect('desk') ?? stage() },
+    { id: 'worker', target: () => office.screenRect('char') ?? stage() },
+    { id: 'bubble', target: aboveWorker },
+    { id: 'coffee', target: () => office.screenRect('machine') },
+    { id: 'bar', target: () => unionRect([$('cpu'), $('ram'), $('btn-settings'), $('btn-mini')]) },
+    { id: 'done', target: () => null }
+  ])
+  tour.onDone = () => void api.store.setOnboarded(true)
+  settings.onTour = () => tour.start()
+  // Let the room settle (workers walk in) before the first-time tour starts.
+  if (!store.onboarded) setTimeout(() => !document.body.classList.contains('mini') && tour.start(), 900)
 
   $('btn-add').addEventListener('click', () => addDialog.open(recent))
   $('mini-add').addEventListener('click', () => addDialog.open(recent))
@@ -208,6 +234,7 @@ async function init(): Promise<void> {
   })
 
   window.addEventListener('keydown', (e) => {
+    if (tour.isOpen) return
     if (e.key === 'Escape' && cmd.isOpen) cmd.close()
   })
 

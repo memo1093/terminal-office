@@ -14,6 +14,7 @@
       <div class="brand"><canvas class="logo" width="16" height="16"></canvas>Terminal Office</div>
       <div class="actions">
         <span id="cpu" class="cpu" aria-live="off">CPU –</span>
+        <span id="ram" class="cpu" aria-live="off">RAM –</span>
         <button id="btn-add" class="primary" data-i18n="bar.add" data-i18n-title="bar.add.title"></button>
         <button id="btn-settings" data-i18n-title="bar.settings">⚙</button>
         <button id="btn-mini" data-i18n-title="bar.mini">▣</button>
@@ -23,7 +24,7 @@
     </header>
 
     <div id="mini-bar">
-      <span class="brand"><canvas class="logo" width="16" height="16"></canvas><span id="mini-cpu" class="cpu">CPU –</span></span>
+      <span class="brand"><canvas class="logo" width="16" height="16"></canvas><span id="mini-cpu" class="cpu">CPU –</span><span id="mini-ram" class="cpu">RAM –</span></span>
       <div class="actions">
         <button id="mini-add" data-i18n-title="mini.add">+</button>
         <button id="mini-restore" data-i18n-title="mini.restore">⤢</button>
@@ -76,6 +77,10 @@
           <div class="setting">
             <span class="setting-label" data-i18n="settings.theme"></span>
             <div class="segmented" id="set-theme" role="radiogroup"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label" data-i18n="settings.tour"></span>
+            <button id="set-tour" type="button" data-i18n="settings.tour.replay"></button>
           </div>
         </div>
       </div>

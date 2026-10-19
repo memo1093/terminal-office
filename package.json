@@ -1,6 +1,6 @@
 {
   "name": "terminal-office",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Pixel-art office that visualizes your running terminals",
   "main": "./out/main/index.js",
   "author": "Mehmet Akyer",

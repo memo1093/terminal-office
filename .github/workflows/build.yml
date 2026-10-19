@@ -27,6 +27,10 @@ jobs:
       # Installs the node-pty prebuilt binary for this runner's OS.
       - run: npm ci
       - run: npm run typecheck
+      # Retina DMG background: one TIFF holding the 1x and 2x images (macOS-only tool).
+      - name: DMG background (Retina)
+        if: runner.os == 'macOS'
+        run: tiffutil -cathidpicheck build/background.png build/background@2x.png -out build/background.tiff
       - name: Package
         shell: bash
         run: |
