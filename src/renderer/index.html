@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ws://localhost:*"
+    />
+    <title>Terminal Office</title>
+  </head>
+  <body>
+    <!-- Visible text is filled in from src/shared/i18n.ts via data-i18n* attributes. -->
+    <header id="titlebar">
+      <div class="brand"><span class="logo"></span>Terminal Office</div>
+      <div class="actions">
+        <span id="cpu" class="cpu" aria-live="off">CPU –</span>
+        <button id="btn-add" class="primary" data-i18n="bar.add" data-i18n-title="bar.add.title"></button>
+        <button id="btn-settings" data-i18n-title="bar.settings">⚙</button>
+        <button id="btn-mini" data-i18n-title="bar.mini">▣</button>
+        <button id="btn-min" data-i18n-title="bar.minimize">—</button>
+        <button id="btn-hide" class="danger-hover" data-i18n-title="bar.hide">✕</button>
+      </div>
+    </header>
+
+    <div id="mini-bar">
+      <span class="brand"><span class="logo"></span><span id="mini-cpu" class="cpu">CPU –</span></span>
+      <div class="actions">
+        <button id="mini-add" data-i18n-title="mini.add">+</button>
+        <button id="mini-restore" data-i18n-title="mini.restore">⤢</button>
+        <button id="mini-hide" data-i18n-title="mini.hide">✕</button>
+      </div>
+    </div>
+
+    <main id="stage"><canvas id="office"></canvas></main>
+
+    <div id="cmd-overlay" class="overlay" hidden>
+      <div class="dialog cmd">
+        <div class="dialog-title"><span class="dot"></span><span id="cmd-title"></span></div>
+        <div class="cmd-row">
+          <span class="prompt">&gt;</span>
+          <input id="cmd-input" type="text" spellcheck="false" autocomplete="off" data-i18n-placeholder="cmd.placeholder" />
+        </div>
+        <div class="dialog-foot">
+          <span data-i18n="cmd.hint"></span>
+          <button id="cmd-ctrlc" data-i18n-title="cmd.ctrlc.title">Ctrl+C</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="add-overlay" class="overlay" hidden>
+      <div class="dialog add">
+        <div class="dialog-title">
+          <span class="dot"></span><span data-i18n="add.title"></span><span class="spacer"></span>
+          <button id="add-close" class="icon" data-i18n-title="add.close">✕</button>
+        </div>
+        <div class="add-body">
+          <button id="add-pick" class="primary pick"><span class="folder-icon"></span><span data-i18n="add.pick"></span></button>
+          <div class="section-title" data-i18n="add.recent"></div>
+          <ul id="recent-list"></ul>
+          <div id="recent-empty" class="muted" data-i18n="add.empty" hidden></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-overlay" class="overlay" hidden>
+      <div class="dialog settings">
+        <div class="dialog-title">
+          <span class="dot"></span><span data-i18n="settings.title"></span><span class="spacer"></span>
+          <button id="settings-close" class="icon" data-i18n-title="settings.close">✕</button>
+        </div>
+        <div class="settings-body">
+          <div class="setting">
+            <span class="setting-label" data-i18n="settings.language"></span>
+            <div class="segmented" id="set-lang" role="radiogroup"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label" data-i18n="settings.theme"></span>
+            <div class="segmented" id="set-theme" role="radiogroup"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="console-overlay" class="overlay" hidden>
+      <div class="dialog console">
+        <div class="dialog-title">
+          <span class="dot"></span>
+          <span id="console-title"></span>
+          <span id="console-path" class="muted"></span>
+          <span class="spacer"></span>
+          <button id="console-hide" data-i18n="console.hide" data-i18n-title="console.hide.title"></button>
+          <button id="console-close" class="danger" data-i18n="console.close" data-i18n-title="console.close.title"></button>
+        </div>
+        <div id="console-confirm" hidden>
+          <span data-i18n="console.confirm"></span>
+          <button id="confirm-yes" class="danger" data-i18n="console.confirm.yes"></button>
+          <button id="confirm-no" data-i18n="console.confirm.no"></button>
+        </div>
+        <div id="console-term"></div>
+        <div class="console-cmd">
+          <span class="prompt">&gt;</span>
+          <input id="console-input" type="text" spellcheck="false" autocomplete="off" data-i18n-placeholder="console.placeholder" />
+          <button id="console-send" data-i18n="console.send" data-i18n-title="console.send.title"></button>
+          <button id="console-ctrlc" data-i18n-title="cmd.ctrlc.title">Ctrl+C</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

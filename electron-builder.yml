@@ -1,0 +1,32 @@
+appId: com.mehmetakyer.terminaloffice
+productName: Terminal Office
+directories:
+  buildResources: build
+  output: dist
+files:
+  - out/**
+  - package.json
+# node-pty ships native binaries (and spawn-helper on macOS/Linux) that must live outside the asar.
+asarUnpack:
+  - node_modules/@lydell/**
+win:
+  target:
+    - nsis
+    - portable
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+mac:
+  category: public.app-category.developer-tools
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+    - target: zip
+      arch: [arm64, x64]
+linux:
+  category: Development
+  maintainer: Mehmet Akyer
+  synopsis: Pixel-art office that visualizes your running terminals
+  target:
+    - AppImage
+    - deb
